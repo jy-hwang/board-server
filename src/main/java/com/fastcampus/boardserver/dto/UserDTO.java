@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -16,10 +16,10 @@ public class UserDTO {
   private String password;
   private String nickname;
   private boolean isAdmin;
-  private Date createTime;
+  private LocalDateTime createTime;
   private boolean isWithdraw;
   private Status status;
-  private Date updateTime;
+  private LocalDateTime updateTime;
 
   public static boolean hasNullDataBeforeRegister(UserDTO userDTO) {
     return userDTO == null || userDTO.getUserId() == null || userDTO.getPassword() == null;

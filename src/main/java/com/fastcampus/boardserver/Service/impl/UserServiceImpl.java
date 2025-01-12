@@ -8,7 +8,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import static com.fastcampus.boardserver.util.SHA256Util.encryptSHA256;
 
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     if (dupIdResult) {
       throw new DuplicateIdException("중복된 아이디입니다.");
     }
-    userProfile.setCreateTime(new Date());
+    userProfile.setCreateTime(LocalDateTime.now());
     userProfile.setPassword(encryptSHA256(userProfile.getPassword()));
     userProfile.setStatus(userProfile.isAdmin() ? UserDTO.Status.ADMIN : UserDTO.Status.DEFAULT);
 
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
               "insertUser ERROR! 회원가입 메서드를 확인하세요\n" + "Params : " + userProfile
       );
     }
-    
+
   }
 
   @Override
@@ -65,6 +65,7 @@ public class UserServiceImpl implements UserService {
 
     if (oldUser != null) {
       oldUser.setPassword(encryptSHA256(afterPassword));
+      oldUser.setUpdateTime(LocalDateTime.now());
       int updateCount = userProfileMapper.updatePassword(oldUser);
     } else {
       log.error("updatePassword Error!");
@@ -85,4 +86,5 @@ public class UserServiceImpl implements UserService {
     }
 
   }
+
 }
