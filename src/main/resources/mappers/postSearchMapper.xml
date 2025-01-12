@@ -37,4 +37,22 @@
 </if>
     </select>
 
+    <select id="getPostsByTag" resultType="com.fastcampus.boardserver.dto.request.PostSearchRequest">
+        SELECT p.no
+             , p.title
+             , p.contents
+             , p.category_no
+             , p.user_no
+             , p.create_time
+             , p.update_time
+             , p.views
+             , p.is_admin
+          FROM POST p
+          join post_tag pt
+            on p.no = pt.post_no
+          join tag t
+            on pt.tag_no = t.no
+         WHERE t.name = #{tagName}
+
+    </select>
 </mapper>

@@ -9,4 +9,5 @@ public interface PostSearchService {
 
   List<PostDTO> getPosts(PostSearchRequest postSearchRequest);
 
+  List<PostDTO> getPostsByTag(String tagName);
 }
