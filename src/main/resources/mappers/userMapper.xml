@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fastcampus.boardserver.mapper.UserProfileMapper">
+
+    <select id="getUserProfile" resultType="com.fastcampus.boardserver.dto.UserDTO">
+        SELECT NO
+             , user_id
+             , password
+             , nickname
+             , is_withdraw
+             , is_admin
+             , status
+             , create_time
+             , update_time
+          FROM USER
+         WHERE user_id = #{userId}
+           AND is_withdraw = 0
+    </select>
+
+    <insert id="insertUserProfile" parameterType="com.fastcampus.boardserver.dto.UserDTO">
+        INSERT
+          INTO USER (user_id, password, nickname, is_withdraw, is_admin, status, create_time)
+        VALUES (#{userId}, #{password}, #{nickname}, #{isWithdraw}, #{isAdmin}, #{status}, #{createTime})
+    </insert>
+
+    <update id="updateUserProfile" parameterType="com.fastcampus.boardserver.dto.UserDTO">
+        UPDATE USER
+           SET nickname = #{nickname}
+             , update_time = #{updateTime}
+         WHERE user_id = #{userId}
+    </update>
+
+    <update id="deleteUserProfile">
+        UPDATE USER
+           SET is_withdraw = 1
+             , update_time = #{updateTime}
+         WHERE user_id = #{userId}
+           AND is_withdraw = 0
+    </update>
+
+    <select id="findByUserIdAndPassword" resultType="com.fastcampus.boardserver.dto.UserDTO">
+        SELECT NO
+             , user_id
+             , password
+             , nickname
+          FROM USER
+         WHERE user_id = #{userId}
+           AND password = #{password}
+           AND is_withdraw = 0
+    </select>
+
+    <select id="idCheck" resultType="int">
+        SELECT COUNT(user_id)
+          FROM USER
+         WHERE user_id = #{userId}
+           AND is_withdraw = 0
+    </select>
+
+    <update id="updatePassword" parameterType="com.fastcampus.boardserver.dto.UserDTO">
+        UPDATE USER
+           SET password = #{password}
+             , update_time = #{updateTime}
+         WHERE user_id = #{userId}
+           AND is_withdraw = 0
+    </update>
+
+
+</mapper>

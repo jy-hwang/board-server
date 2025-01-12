@@ -1,4 +1,1 @@
-spring:
-  application:
-    name: board-server
-
+spring:  application:    name: board-server  datasource:    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy    username: ${RDBMS_USERNAME}    password: ${RDBMS_PASSWORD}    jdbc-url: jdbc:log4jdbc:mariadb://${RDBMS_IP}:${RDBMS_PORT}/${RDBMS_DB}mybatis:  mapper-locations: classpath:mappers/*.xml  config-location: classpath:mybatis-config.xmllogging:  level:    root: info    com.zaxxer.hikari: WARN
