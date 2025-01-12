@@ -1,6 +1,7 @@
 package com.fastcampus.boardserver.controller;
 
 import com.fastcampus.boardserver.Service.impl.UserServiceImpl;
+import com.fastcampus.boardserver.aop.LoginCheck;
 import com.fastcampus.boardserver.dto.UserDTO;
 import com.fastcampus.boardserver.dto.request.UserDeleteId;
 import com.fastcampus.boardserver.dto.request.UserLoginRequest;
@@ -22,6 +23,8 @@ public class UserController {
 
   private final UserServiceImpl userService;
 
+  private static LoginResponse loginResponse;
+
   @Autowired
   public UserController(UserServiceImpl userService) {
     this.userService = userService;
@@ -41,7 +44,6 @@ public class UserController {
     ResponseEntity<LoginResponse> responseEntity = null;
     String id = userLoginRequest.getUserId();
     String password = userLoginRequest.getPassword();
-    LoginResponse loginResponse;
     UserDTO userInfo = userService.login(id, password);
 
     if (userInfo == null) {
@@ -78,15 +80,14 @@ public class UserController {
   }
 
   @PatchMapping("/password")
-  public ResponseEntity<LoginResponse> updateUserPassword(@RequestBody UserUpdatePasswordRequest userUpdatePasswordRequest, HttpSession session) {
+  @LoginCheck(type = LoginCheck.UserType.USER)
+  public ResponseEntity<LoginResponse> updateUserPassword(String accountId, @RequestBody UserUpdatePasswordRequest userUpdatePasswordRequest, HttpSession session) {
     ResponseEntity<LoginResponse> responseEntity = null;
-    LoginResponse loginResponse = null;
-    String id = SessionUtil.getLoginMemberId(session);
     String beforePassword = userUpdatePasswordRequest.getBeforePassword();
     String afterPassword = userUpdatePasswordRequest.getAfterPassword();
 
     try {
-      userService.updatePassword(id, beforePassword, afterPassword);
+      userService.updatePassword(accountId, beforePassword, afterPassword);
       ResponseEntity.ok(new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK));
 
     } catch (IllegalArgumentException e) {
@@ -100,15 +101,14 @@ public class UserController {
   @DeleteMapping()
   public ResponseEntity<LoginResponse> deleteId(@RequestBody UserDeleteId userDeleteId, HttpSession session) {
     ResponseEntity<LoginResponse> responseEntity = null;
-    LoginResponse loginResponse = null;
     String id = SessionUtil.getLoginMemberId(session);
 
     try {
       userService.deleteId(id, userDeleteId.getPassword());
-      responseEntity = new ResponseEntity<LoginResponse>(HttpStatus.OK);
+      responseEntity = new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK);
 
     } catch (RuntimeException e) {
-      log.error("deleteId 실패 : {}", e);
+      log.error("deleteId 실패");
       responseEntity = new ResponseEntity<LoginResponse>(HttpStatus.BAD_REQUEST);
     }
 
