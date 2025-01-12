@@ -22,7 +22,7 @@ public class LoginCheckAspect {
 
   @Around("@annotation(com.fastcampus.boardserver.aop.LoginCheck) && @ annotation(loginCheck)")
   public Object adminLoginCheck(ProceedingJoinPoint proceedingJoinPoint, LoginCheck loginCheck) throws Throwable {
-    HttpSession session = (HttpSession) ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest().getSession();
+    HttpSession session = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest().getSession();
     String userId = null;
     int idIndex = 0;
 
@@ -45,7 +45,7 @@ public class LoginCheckAspect {
     }
     Object[] modefiedArgs = proceedingJoinPoint.getArgs();
 
-    if(proceedingJoinPoint != null){
+    if (proceedingJoinPoint != null) {
       modefiedArgs[idIndex] = userId;
     }
 

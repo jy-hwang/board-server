@@ -21,9 +21,8 @@ import org.springframework.web.bind.annotation.*;
 @Log4j2
 public class UserController {
 
-  private final UserServiceImpl userService;
-
   private static LoginResponse loginResponse;
+  private final UserServiceImpl userService;
 
   @Autowired
   public UserController(UserServiceImpl userService) {
