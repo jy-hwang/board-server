@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fastcampus.boardserver.mapper.CommentMapper">
+
+    <insert id="register" parameterType="com.fastcampus.boardserver.dto.CommentDTO">
+        <selectKey keyProperty="no" resultType="Integer">
+        SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT
+          INTO comment (post_no, contents, sub_comment_no, user_no, create_time)
+        VALUES (#{postNo}, #{contents}, #{subCommentNo}, #{userNo}, #{createTime})
+
+    </insert>
+
+    <update id="update" parameterType="com.fastcampus.boardserver.dto.CommentDTO">
+        UPDATE comment
+           SET contents = #{contents}
+             , sub_comment_no = #{subCommentNo}
+             , update_time = #{updateTime}
+         WHERE no = #{no}
+    </update>
+
+    <update id="delete" parameterType="com.fastcampus.boardserver.dto.CommentDTO">
+        UPDATE comment
+           SET delete_time = #{updateTime}
+         WHERE no = #{no}
+    </update>
+
+</mapper>
