@@ -46,6 +46,7 @@
              , user_id
              , password
              , nickname
+             , status
           FROM USER
          WHERE user_id = #{userId}
            AND password = #{password}
